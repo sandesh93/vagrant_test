@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/centos-6.6"
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "Centos6.6-Test"
+    end
+  
+  config.vm.network "forwarded_port", guest: 22, host: 2222 ,host_ip: "127.0.0.1" ,id: 'ssh'
+  config.vm.network "forwarded_port", guest: 80, host: 8080 ,host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 443, host: 8443,host_ip: "127.0.0.1"
+  
+  config.vm.network "public_network" ,bridged: #"192.168.1.109"
+  config.vm.boot_timeout = 900
+  
+  
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.memory = "1024"
+   end
+
+  config.vm.provision "shell", path: "my_provision.sh" , run: 'always'
+end
+
